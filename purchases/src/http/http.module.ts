@@ -9,14 +9,19 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import path from 'node:path';
-import { ApolloDriver } from '@nestjs/apollo';
+import {
+  ApolloFederationDriver,
+  ApolloFederationDriverConfig,
+} from '@nestjs/apollo';
+import { MessagingModule } from 'src/messaging/messaging.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     DatabaseModule,
-    GraphQLModule.forRoot({
-      driver: ApolloDriver,
+    MessagingModule,
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
       autoSchemaFile: path.resolve(process.cwd(), 'src/schema.gql'),
     }),
   ],
